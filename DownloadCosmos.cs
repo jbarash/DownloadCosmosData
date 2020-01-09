@@ -4,18 +4,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RunCosmosScript
+namespace DownloadCosmosData
 {
     class DownloadCosmos
     {
-        public static void DownloadFile(string streamPath, string fileName, string downloadDirectory, Boolean txtHeader)
+        public static int recordCount;
+        public static void DownloadFile(string streamPath, string fileName, string downloadDirectory, Boolean txtHeader, int incr)
         {
             var exporter = new Exporter();
 
             string stream = streamPath + fileName + ".ss";
             string filename = downloadDirectory + fileName + ".txt";
             exporter.ExcludeHeaders = txtHeader;
-            exporter.Export(stream, filename);
+            exporter.incr = incr;
+            exporter.Export(stream, filename);            
+        }
+        public static void DownloadFileFullPath(string streamPath, string fileName, string downloadDirectory, Boolean txtHeader, int incr)
+        {
+            var exporter = new Exporter();
+
+            string filename = downloadDirectory + fileName + ".txt";
+            exporter.ExcludeHeaders = txtHeader;
+            exporter.incr = incr;
+            exporter.Export(streamPath, filename);
         }
     }
     public class Exporter
@@ -25,6 +36,9 @@ namespace RunCosmosScript
         public bool ExcludeHeaders;
         public int Top = -1;
         public string[] Columns;
+        public int incr;
+        
+        
 
         public Exporter()
         {
@@ -35,7 +49,7 @@ namespace RunCosmosScript
         {
             var settings = new Microsoft.Cosmos.ExportClient.ScopeExportSettings();
             settings.Path = stream;
-            // settings.Credential = new System.Net.NetworkCredential("NORTHAMERICA\v-jabara", "Xwl5QiyD");
+           
 
             var exportClient = new Microsoft.Cosmos.ExportClient.ExportClient(settings);
 
@@ -62,13 +76,15 @@ namespace RunCosmosScript
                     using (Microsoft.Cosmos.ExportClient.IExportDataReader dataReader = prevTask.Result.DataReader)
                     {
                         OutputToFile(dataReader, filename, this.Separator, this.Terminator);
+                        Console.WriteLine("New Thread");
                     }
                 });
                 readTask.Wait();
             }
             catch (System.AggregateException ae)
             {
-                System.Console.WriteLine(ae.ToString());
+                //System.Console.WriteLine(ae.ToString());
+                throw;
             }
 
         }
@@ -115,7 +131,7 @@ namespace RunCosmosScript
                     }
 
 
-                    int n = 0;
+                    DownloadCosmos.recordCount = 0;
                     object[] values = new object[reader.FieldCount];
                     while (reader.Read())
                     {
@@ -132,7 +148,9 @@ namespace RunCosmosScript
                         }
                         writer.Write(this.Terminator);
                         //Console.Write(this.Terminator);
-                        n++;
+                        DownloadCosmos.recordCount++;
+                        if (DownloadCosmos.recordCount % incr == 0)
+                            Console.Write(".");
                     }
                 }
             }

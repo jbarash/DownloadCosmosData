@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RunCosmosScript.Properties {
+namespace DownloadCosmosData.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -44,6 +44,30 @@ namespace RunCosmosScript.Properties {
             }
             set {
                 this["logPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SQLemail")]
+        public string Profile {
+            get {
+                return ((string)(this["Profile"]));
+            }
+            set {
+                this["Profile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("jbarash@meritdirect.com")]
+        public string Recipients {
+            get {
+                return ((string)(this["Recipients"]));
+            }
+            set {
+                this["Recipients"] = value;
             }
         }
     }

@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace RunCosmosScript
+namespace DownloadCosmosData
 {
     class cosmosSetup
     {
@@ -132,6 +132,13 @@ namespace RunCosmosScript
         {
             get { return (string)this["updateFile"]; }
             set { this["updateFile"] = value; }
+        }
+
+        [ConfigurationProperty("incr", DefaultValue = "50000", IsRequired = true)]
+        public int incr
+        {
+            get { return (int) this["incr"]; }
+            set { this["incr"] = value; }
         }
 
     }

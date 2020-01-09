@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RunCosmosScript.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DownloadCosmosData.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="ConnectionString" Type="System.String" Scope="User">
@@ -7,6 +7,12 @@
     </Setting>
     <Setting Name="logPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\\temp\\</Value>
+    </Setting>
+    <Setting Name="Profile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">SQLemail</Value>
+    </Setting>
+    <Setting Name="Recipients" Type="System.String" Scope="User">
+      <Value Profile="(Default)">jbarash@meritdirect.com</Value>
     </Setting>
   </Settings>
 </SettingsFile>
