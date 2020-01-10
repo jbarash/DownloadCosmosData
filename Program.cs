@@ -96,8 +96,40 @@ namespace DownloadCosmosData
                 System.Environment.Exit(0);
                 
             }
+            // key is full path to stream, value is file name only
             var fileDict = GetFiles.GetAllFiles(fe.streamPath, fe.filePrefix + @"\w+\.ss$");
-            DownloadCosmos.DownloadFileFullPath(fileDict.FirstOrDefault().Key, fileDict.FirstOrDefault().Value.Replace(".ss", ""), fe.downloadDirectory, bHeader, fe.incr);
+            try
+            {
+                DownloadCosmos.DownloadFileFullPath(fileDict.FirstOrDefault().Key, fileDict.FirstOrDefault().Value.Replace(".ss", ""), fe.downloadDirectory, bHeader, fe.incr);
+            }
+            catch (VcClientExceptions.VcClientException ex)
+            {
+                if (ex.ToString().Contains("throttled") || ex.ToString().Contains("ExportResetException"))
+                {
+                    DownloadCosmos.DownloadFileFullPath(fileDict.FirstOrDefault().Key, fileDict.FirstOrDefault().Value.Replace(".ss", ""), fe.downloadDirectory, bHeader, fe.incr);
+                }
+                else
+                {
+                    sendEmail("DownloadCosmos Error " + args[0], ex.ToString());
+                    LogError(ex.ToString());
+                    System.Environment.Exit(2);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex.ToString().Contains("throttled") || ex.ToString().Contains("ExportResetException"))
+                {
+                    DownloadCosmos.DownloadFileFullPath(fileDict.FirstOrDefault().Key, fileDict.FirstOrDefault().Value.Replace(".ss", ""), fe.downloadDirectory, bHeader, fe.incr);
+                }
+                else
+                {
+                    sendEmail("DownloadCosmos Error " + args[0], ex.ToString());
+                    LogError(ex.ToString());
+                    System.Environment.Exit(2);
+                }
+
+            }
+            
             System.Environment.Exit(0);
             try {
 
@@ -216,7 +248,7 @@ namespace DownloadCosmosData
                                     }
 
                                 }
-                                sendEmail("Download Cosmos Complete " + args[0], DateTime.Now.ToString("MMM dd yyyy hh:mm tt") + "<br/>" + relativeStreamPath + "<br/>" + DownloadCosmos.recordCount.ToString(" #,### records"));
+                                sendEmail("Download Cosmos Complete " + args[0], DateTime.Now.ToString("MMM dd yyyy hh:mm tt") + "<br/>" + relativeStreamPath + "<br/>" + DownloadCosmos.recordCount.ToString(" #,##0 records"));
                             }
 
                         }
